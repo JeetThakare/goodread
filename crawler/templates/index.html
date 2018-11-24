@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="goodreadApp">
 
   <head>
 
@@ -16,14 +16,20 @@
     <!-- Custom styles for this template -->
     <link href="{% static "css/blog-home.css" %}" rel="stylesheet">
 
+    <script src="{% static "angular.js"  %}" ></script>
+    <script src="{% static "goodread.js"  %}" ></script>
+    <style>
+      .custom { cursor: pointer; 
+        color:rgba(255,255,255,1.5)!important;}
+    </style>
   </head>
 
-  <body>
+  <body ng-controller="goodreadController">
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
+        <a class="navbar-brand" href="#">Good Read</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,7 +41,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about">About</a>
+              <a class="nav-link custom" ng-click="runmodel()">Run Model</a>
             </li>
           </ul>
         </div>
@@ -44,14 +50,16 @@
 
     <!-- Page Content -->
     <div class="container">
-
-      <div class="row">
+    <div style="width:800px; margin:0 auto;" ng-show="runmodelLoader">
+      <img src="{% static "ai_loading.gif"  %}" alt="Loading">
+    </div>
+      <div class="row" ng-hide="runmodelLoader">
 
         <!-- Blog Entries Column -->
         <div class="col-md-8">
 
-          <h1 class="my-4">Page Heading
-            <small>Secondary Text</small>
+          <h1 class="my-4">AI - Article Suggestions
+            <!-- <small>Secondary Text</small> -->
           </h1>
 
           <!-- Blog Post -->
@@ -112,7 +120,7 @@
         <div class="col-md-4">
 
           <!-- Search Widget -->
-          <div class="card my-4">
+          <!-- <div class="card my-4">
             <h5 class="card-header">Search</h5>
             <div class="card-body">
               <div class="input-group">
@@ -122,7 +130,7 @@
                 </span>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- Categories Widget -->
           <div class="card my-4">
@@ -160,12 +168,12 @@
           </div>
 
           <!-- Side Widget -->
-          <div class="card my-4">
+          <!-- <div class="card my-4">
             <h5 class="card-header">Side Widget</h5>
             <div class="card-body">
               You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
             </div>
-          </div>
+          </div> -->
 
         </div>
 
@@ -178,7 +186,7 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+        <p class="m-0 text-center text-white">Good Read | NLP based summerized article suggetions using Latent Dirichilet Analysis</p>
       </div>
       <!-- /.container -->
     </footer>

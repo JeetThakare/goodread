@@ -5,6 +5,8 @@ from crawler.models import Link
 from crawler.crawler_utils.utils import get_domain_name
 import requests
 
+# Adapted version of https://github.com/buckyroberts/Spider
+
 
 class Spider:
 

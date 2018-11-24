@@ -25,7 +25,9 @@ class Link(models.Model):
 
 
 class Topic(models.Model):
-    topic = models.CharField(max_length=50)
+    topic = models.IntegerField()
+    keyword = models.CharField(max_length=50, blank=True)
+    probability = models.FloatField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Topic"
@@ -40,10 +42,11 @@ class Topic(models.Model):
 
 class Article(models.Model):
     article = models.TextField()
-    # topics = models.ForeignKey(
+    topic = models.IntegerField(blank=True,null=True)
+    # topic = models.ForeignKey(
     #     Topic, on_delete=models.PROTECT, blank=True, null=True)
     url = models.CharField(max_length=256, unique=True)
-    # title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50, blank=True)
 
     class Meta:
         verbose_name = "Article"

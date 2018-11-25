@@ -2,11 +2,14 @@ import re
 import string
 import pickle
 
+import logging
+log = logging.getLogger(__name__)
+
 import gensim
 import nltk
 import pandas as pd
 from nltk.stem import PorterStemmer, WordNetLemmatizer
-from crawler.models import Article, Topic
+from crawler.models import Article, Topic, ArticleTopic
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -31,7 +34,7 @@ def preprocess_articles():
     articles = Article.objects.all().values_list('id', 'article')
     # print(type(articles))
     articles_df = pd.DataFrame.from_records(data=list(articles), columns=['id', 'article'])
-    print("Got {} reconds for lda model".format(len(articles_df)))
+    logging.info("Got {} reconds for lda model".format(len(articles_df)))
     stemmer = PorterStemmer()
     lemm = WordNetLemmatizer()
     articles_df['preprocessed'] = articles_df.apply(
@@ -47,10 +50,10 @@ def run_topic_modelling(articles_df):
     try:
         fileObject = open('lda_model','rb')  
         lda_model4 = pickle.load(fileObject)
-        print("model found")
+        logging.info("model found")
         fileObject.close()
     except FileNotFoundError:
-        print("runnign model now")
+        logging.info("runnign model now")
         lda_model4 = gensim.models.LdaMulticore(bow_corpus,
                                                 num_topics=17,
                                                 id2word=dictionary,
@@ -71,6 +74,7 @@ def run_topic_modelling(articles_df):
     return topicslist, dictionary, lda_model4
 
 def save_topics(topicslist):
+    logging.info("deleting topics")
     Topic.objects.all().delete()
     for topic in topicslist:
         # print(topic)
@@ -80,13 +84,16 @@ def save_topics(topicslist):
 def assign_topics_article(dictionary, lda_model):
     articles = Article.objects.all()
     topics = Topic.objects.all()
+    print("deleting ArticleTopic mapping")
+    ArticleTopic.objects.all().delete()
+
     stemmer = PorterStemmer()
     lemm = WordNetLemmatizer()
     for article in articles:
         res = lda_model.get_document_topics(dictionary.doc2bow(textcleaning(article.article, stemmer, lemm)))
-        for topic in topics:
-            if topic.topic == res[0][0]:
-                t = topic.topic
-                break
-        article.topic=t
-        article.save(update_fields=['topic'])
+        for r in res:
+            # print("here")
+            a = ArticleTopic(articleId=article, topicId=r[0], probability=r[1])
+            a.save()
+        # article.topic=t
+        # article.save(update_fields=['topic'])

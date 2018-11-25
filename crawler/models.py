@@ -57,3 +57,18 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse("Article_detail", kwargs={"pk": self.pk})
+
+class ArticleTopic(models.Model):
+    articleId = models.ForeignKey(Article, on_delete=models.PROTECT, blank=True, null=True)
+    topicId = models.IntegerField(blank=True, null=True)
+    probability = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "ArticleTopic"
+        verbose_name_plural = "ArticleTopics"
+
+    # def __str__(self):
+    #     return self.name
+
+    def get_absolute_url(self):
+        return reverse("ArticleTopic_detail", kwargs={"pk": self.pk})

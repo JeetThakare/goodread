@@ -43,6 +43,7 @@ def preprocess_articles():
 
 
 def run_topic_modelling(articles_df):
+    NUMTOPICS = 30
     dictionary = gensim.corpora.Dictionary(articles_df['preprocessed'])
     dictionary.filter_extremes(no_below=15, no_above=0.1)
     bow_corpus = [dictionary.doc2bow(doc)
@@ -55,14 +56,14 @@ def run_topic_modelling(articles_df):
     except FileNotFoundError:
         logging.info("runnign model now")
         lda_model4 = gensim.models.LdaMulticore(bow_corpus,
-                                                num_topics=17,
+                                                num_topics=NUMTOPICS,
                                                 id2word=dictionary,
                                                 passes=100,
                                                 workers=2)
         with open('lda_model', 'wb') as fileobj:
             pickle.dump(lda_model4, fileobj)
 
-    topics = lda_model4.show_topics()
+    topics = lda_model4.show_topics(num_topics=NUMTOPICS)
 
     topicslist = []
     for idx,t in enumerate(topics):

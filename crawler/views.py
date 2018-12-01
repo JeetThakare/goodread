@@ -24,7 +24,7 @@ def run_model(request):
 
 def get_topics(request):
     try:
-        topics = Topic.objects.all().order_by('-probability')[:150]
+        topics = Topic.objects.all().order_by('-probability')[:250]
         response = []
         topicset = set()
         for topic in topics:
@@ -45,11 +45,11 @@ def get_articles(request):
     articletopics_set = set()
     res = list()
     for topick in topicskeywords:
-        topicobjs = Topic.objects.filter(keyword = topick).order_by('-probability')[:5]
+        topicobjs = Topic.objects.filter(keyword = topick).order_by('-probability')[:10]
         topics.update([tobj.topic for tobj in topicobjs])
     # print(topics)
     for t in topics:
-        articletopics = ArticleTopic.objects.filter(topicId=t).order_by('-probability')[:5]
+        articletopics = ArticleTopic.objects.filter(topicId=t).order_by('-probability')[:10]
         articletopics_set.update(articletopics)
     # print(articletopics_set)
     res.append([{'text':article.articleId.article, 'url':article.articleId.url, 'title':article.articleId.title} for article in articletopics_set])

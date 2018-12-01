@@ -12,15 +12,16 @@ def get_post(link):
         'div', {'class': 'section-inner sectionLayout--insetColumn'})
     content = ' '.join([div.get_text(strip=True) for div in divs])
     content = unicodedata.normalize("NFKD", content)
-    return content
+    title = soup.title.string
+    return content, title
 
 
 def save_post_from(link):
     if ("/p/" in link) or ("/s/" in link):
         print("finding post on: ", link)
-        content = get_post(link)
+        content, title = get_post(link)
         if content:
-            new_article = Article(article=content, url=link)
+            new_article = Article(article=content, url=link, title=title)
             try:
                 new_article.save()
             except Exception as e:

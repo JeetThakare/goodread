@@ -52,6 +52,6 @@ def get_articles(request):
         articletopics = ArticleTopic.objects.filter(topicId=t).order_by('-probability')[:5]
         articletopics_set.update(articletopics)
     # print(articletopics_set)
-    res.append([{'text':article.articleId.article, 'url':article.articleId.url} for article in articletopics_set])
+    res.append([{'text':article.articleId.article, 'url':article.articleId.url, 'title':article.articleId.title} for article in articletopics_set])
     # print(res)
     return JsonResponse({'data':res})

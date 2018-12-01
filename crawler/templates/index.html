@@ -90,7 +90,7 @@
           <!-- Blog Post -->
           <div class="card mb-4" ng-repeat="a in articles[0]">
             <div class="card-body">
-              <h2 class="card-title">Post Title</h2>
+              <h2 class="card-title">{{a.title}}</h2>
               <p class="card-text short">{{a.text}}</p>
               <a href="{{a.url}}" target="_blank" class="btn btn-primary">Read More &rarr;</a>
             </div>

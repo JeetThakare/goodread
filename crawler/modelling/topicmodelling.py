@@ -31,10 +31,10 @@ def textcleaning(article, stemmer, lemm):
 
 
 def preprocess_articles():
-    articles = Article.objects.all().values_list('id', 'article')
-    # print(type(articles))
+    articles = Article.objects.all().values_list('id', 'article')[:500]
+    # print(len(articles))
     articles_df = pd.DataFrame.from_records(data=list(articles), columns=['id', 'article'])
-    logging.info("Got {} reconds for lda model".format(len(articles_df)))
+    print("Got {} reconds for lda model".format(len(articles_df)))
     stemmer = PorterStemmer()
     lemm = WordNetLemmatizer()
     articles_df['preprocessed'] = articles_df.apply(
@@ -51,10 +51,10 @@ def run_topic_modelling(articles_df):
     try:
         fileObject = open('lda_model','rb')  
         lda_model4 = pickle.load(fileObject)
-        logging.info("model found")
+        print("model found")
         fileObject.close()
     except FileNotFoundError:
-        logging.info("runnign model now")
+        print("runnign model now")
         lda_model4 = gensim.models.LdaMulticore(bow_corpus,
                                                 num_topics=NUMTOPICS,
                                                 id2word=dictionary,
@@ -75,7 +75,7 @@ def run_topic_modelling(articles_df):
     return topicslist, dictionary, lda_model4
 
 def save_topics(topicslist):
-    logging.info("deleting topics")
+    print("deleting topics")
     Topic.objects.all().delete()
     for topic in topicslist:
         # print(topic)

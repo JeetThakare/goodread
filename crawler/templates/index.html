@@ -35,8 +35,8 @@
       .custom { cursor: pointer; 
         color:rgba(255,255,255,1.5)!important;}
       .short {
-        width: 500px;
-        height: 100px;
+        width: 700px;
+        height: auto;
         text-overflow: ellipsis;
         overflow: hidden;
       }
@@ -91,7 +91,7 @@
           <div class="card mb-4" ng-repeat="a in articles[0]">
             <div class="card-body">
               <h2 class="card-title">{{a.title}}</h2>
-              <p class="card-text short">{{a.text}}</p>
+              <p class="card-text short">{{a.summary}}</p>
               <a href="{{a.url}}" target="_blank" class="btn btn-primary">Read full article on source site &rarr;</a>
             </div>
           </div>

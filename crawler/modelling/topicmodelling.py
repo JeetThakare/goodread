@@ -1,15 +1,19 @@
+import logging
+import pickle
 import re
 import string
-import pickle
-
-import logging
-log = logging.getLogger(__name__)
 
 import gensim
 import nltk
 import pandas as pd
+from nltk.tokenize import sent_tokenize
+# from crawler.modelling.summarizer import summarize
+from crawler.modelling.summerizer_new import summarize
+from crawler.models import Article, ArticleTopic, Topic
 from nltk.stem import PorterStemmer, WordNetLemmatizer
-from crawler.models import Article, Topic, ArticleTopic
+
+log = logging.getLogger(__name__)
+
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -39,6 +43,8 @@ def preprocess_articles():
     lemm = WordNetLemmatizer()
     articles_df['preprocessed'] = articles_df.apply(
         lambda row: textcleaning(row.article, stemmer, lemm), axis=1)
+    # articles_df['sentences'] = articles_df.apply(
+    #     lambda row: createsentences(row.article), axis=1)
     return articles_df
 
 
@@ -96,5 +102,7 @@ def assign_topics_article(dictionary, lda_model):
             # print("here")
             a = ArticleTopic(articleId=article, topicId=r[0], probability=r[1])
             a.save()
-        # article.topic=t
-        # article.save(update_fields=['topic'])
+        # print(article.article)
+        article.summary=summarize(sent_tokenize(article.article))
+        print(article.summary)
+        article.save(update_fields=['summary'])

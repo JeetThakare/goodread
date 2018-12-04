@@ -42,6 +42,7 @@ class Topic(models.Model):
 
 class Article(models.Model):
     article = models.TextField()
+    summary = models.TextField()
     topic = models.IntegerField(blank=True,null=True)
     # topic = models.ForeignKey(
     #     Topic, on_delete=models.PROTECT, blank=True, null=True)

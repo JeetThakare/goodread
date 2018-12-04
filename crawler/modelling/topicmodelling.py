@@ -6,7 +6,9 @@ import string
 import gensim
 import nltk
 import pandas as pd
-from crawler.modelling.summarizer import summarize
+from nltk.tokenize import sent_tokenize
+# from crawler.modelling.summarizer import summarize
+from crawler.modelling.summerizer_new import summarize
 from crawler.models import Article, ArticleTopic, Topic
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 
@@ -100,5 +102,7 @@ def assign_topics_article(dictionary, lda_model):
             # print("here")
             a = ArticleTopic(articleId=article, topicId=r[0], probability=r[1])
             a.save()
-        article.summary=summarize(article.article)
+        # print(article.article)
+        article.summary=summarize(sent_tokenize(article.article))
+        print(article.summary)
         article.save(update_fields=['summary'])
